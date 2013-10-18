@@ -20,7 +20,13 @@ class Fetch {
 	}
 	function fetch() {
 		var projects:List<{ id : Int, name : String }> = site.search("");
-		var infos:Array<ProjectInfos> = [for(proj in projects) site.infos(proj.name)];
+		var i = 0;
+		var infos:Array<ProjectInfos> = [for(p in projects) {
+			if(i % 40 == 0)
+				Sys.println('${Std.int((i / projects.length) * 100)}% fetched');
+			i++;
+			site.infos(p.name);
+		}];
 		var data:FetchData = {infos: infos};
 		if(!TMP.exists())
 			TMP.createDirectory();
